@@ -60,8 +60,6 @@
 
 每一项从原始事件到显示值的完整推导、时间线语义的证据、以及一轮 21 步真实对话的逐项算例，见 **[docs/metrics.md](docs/metrics.md)**。
 
-每一项从原始事件到显示值的完整推导、时间线语义的证据、以及一轮 21 步真实对话的逐项算例，见 **[docs/metrics.md](docs/metrics.md)**。
-
 ## 三、设置：始终显示消息操作行
 
 官方行为是：**只有最新一轮**的操作行常驻，更早轮次在新消息出现后会被 `opacity: 0` 隐藏、要悬停才出现；你发出去的消息，一旦有更新的消息，它的「复制 · 时间」同样会隐藏。
@@ -105,6 +103,7 @@
 [data-clock="end"] > span:last-child { display: contents }
 [data-clock="end"] > span:last-child > :first-child { order: 20; margin-left: 8px }
 [data-actions-reveal] [class*="_actions"] [data-dsh-ssp] { order: 21 }
+[data-actions-reveal] [class*="_actions"] > :has(> [data-dsh-ssp]) { order: 21 }  /* 兜底 */
 [data-clock="end"] > span:last-child > :last-child { order: 22 }
 ```
 
@@ -126,7 +125,10 @@
 | `en` / `en-US` … | English |
 | 其他任何语言 | **English**（尚未翻译，按要求回落英文） |
 
-标签兼具通俗与专业：中文带通用英文缩写，例如「预填充速度 (Prefill)」，英文侧为 "Prefill speed"。
+标签保持简短：三项不精确的读数会在中文里带「（估算）」、英文里带 `(estimated)`，其余标签不含缩写。
+
+- 中文：`预填充输入（估算）`、`本轮解码速度（估算）`、`本轮预填充速度（估算）`
+- English：`Prefill input (estimated)`、`Turn decode speed (estimated)`、`Turn prefill speed (estimated)`
 
 ## 六、数据从哪来
 
@@ -210,7 +212,7 @@ ctx.sessionProjections.register('sessionSpeed')
 本机（同一 profile）已装插件的实测交集：
 
 - **`dsh-live-token-stats`**：注册在 `conversation.composer.dock`（输入框下方），投影键 `liveTokenStats`，组件只用内联样式、没有 `className`。与本插件无键名、无槽位、无样式交集。
-- **`dshmarket`**：插件市场与应用内安装器，读写 profile 的 bundle 列表与自己的 `.dsh-market/state.json`，不碰上述槽位与投影键。
+- **`dshmarket`**：插件市场与应用内安装器，读写 profile 的 bundle 列表与 `<profile>/.dsh-market/state.json`，不碰上述槽位与投影键。
 - **`dsh-armory`**：面板类插件，不碰上述槽位与投影键。
 
 ### 8.4 遵循的插件规则
@@ -225,17 +227,17 @@ ctx.sessionProjections.register('sessionSpeed')
 
 ## 九、性能（实测）
 
-合成会话压测（每轮 10 步、每步 250 token）：
+合成会话压测（每轮 10 步、每步 250 token，3 个流式块；预热后取 3 次最好成绩）：
 
 | 会话规模 | 折叠总耗时 | 单次 `view()` | 线上视图体积 | 投影状态体积 |
 |---|---|---|---|---|
-| 10 轮 × 5 步 | 1.0 ms | 0.17 ms | 2.2 KiB | 6.3 KiB |
-| 50 轮 × 10 步 | 3.4 ms | 0.25 ms | 11.2 KiB | 58.9 KiB |
-| 200 轮 × 10 步 | 4.7 ms | 0.49 ms | 44.8 KiB | 236.8 KiB |
+| 10 轮 × 5 步 | 0.1 ms | 0.06 ms | 2.4 KiB | 6.2 KiB |
+| 50 轮 × 10 步 | 0.5 ms | 0.28 ms | 12.2 KiB | 57.9 KiB |
+| 200 轮 × 10 步 | 2.3 ms | 0.58 ms | 48.7 KiB | 232.9 KiB |
 
-- **每个事件的边际成本约 1.14 微秒**；会话每秒最多个位数事件，可忽略。
+- **每个事件的边际成本 0.25–0.35 微秒**；会话每秒最多个位数事件，可忽略。
 - `view()` 只在状态真的变化时由框架调用。
-- 线上视图随**轮数**线性增长（只发每轮汇总，不发每步明细）；真实会话 26 轮为 6.6 KiB。
+- 线上视图随**轮数**线性增长（只发每轮汇总，不发每步明细）；真实会话 26 轮、1151 个事件为 **7.3 KiB**。
 
 ## 十、调试
 
@@ -263,6 +265,14 @@ plugin_manager({ action: 'install_bundle', target: '<仓库绝对路径>' })
 
 卸载：`plugin_manager({ action: 'remove_bundle', target: 'dsh-session-speed-pill' })`。卸载后投影键消失、胶囊消失，无残留节点。
 
+**也可以直接从 GitHub 安装**（装的是真实包，不是链接）：
+
+```js
+plugin_manager({ action: 'install_bundle', target: 'github:wzsx150/dsh-session-speed-pill' })
+```
+
+这种方式下改本地代码不会生效，需要先提交并推送，再重新安装。若本机到 GitHub 较慢，插件管理器那条 5 秒的连通性探测可能超时（实测本机 `git ls-remote` 要 6–8 秒），此时可在 profile 目录用 pnpm 直接更新：`pnpm update dsh-session-speed-pill`。
+
 **改动生效范围**：`index.js` / `lib/*` 是 Host 半身，改动需要重启 Harness；`client.js` 是浏览器半身，刷新页面即可。
 
 ## 十二、已知限制
@@ -270,7 +280,7 @@ plugin_manager({ action: 'install_bundle', target: '<仓库绝对路径>' })
 1. **只测日志里记下来的东西。** 如果某个 provider 没有回写 `dt` 时间线，该轮仍有胶囊与耗时，但速度类指标为 `—`。
 2. **数值在本轮提交后才落定。** 动作行只在本轮收尾后渲染，所以胶囊不会随 token 跳动；这与官方所有投影的行为一致。
 3. **分叉会话计入继承前缀。** fork 继承父会话的事件，那些轮次同样被折叠。
-4. **schema 是本地实现，不是 Zod。** `register()` 声明的是 Zod schema，但运行时只调用 `.parse()`。本插件以目录链接方式安装，`import 'zod'` 会从链接的真实路径解析而找不到 `node_modules`，因此 [`lib/schema.js`](lib/schema.js) 提供了只暴露 `parse` / `safeParse` 的最小契约对象。
+4. **schema 是本地实现，不是 Zod。** `register()` 声明的是 Zod schema，但运行时只调用 `.parse()`。本插件不声明任何依赖：以目录链接方式安装时，`import 'zod'` 会从链接的真实路径解析而找不到 `node_modules`；从 git/npm 安装时则会为一个纯校验对象多出一个运行时依赖。因此 [`lib/schema.js`](lib/schema.js) 提供了只暴露 `parse` / `safeParse` 的最小契约实现。
 5. **文案跟随 `<html lang>`**，在渲染时读取；不重载页面切换语言，下一帧即生效。插件管理器里的标题与描述由 [`locale/zh.json`](locale/zh.json) 与 [`locale/en.json`](locale/en.json) 提供（仅中英）。
 6. **客户端半身不会热替换。** 改了 `client.js` 需要刷新页面才会加载新一代模块。
 7. **设置开关按浏览器存储，且标签页之间不实时同步。** 换设备或清理站点数据会回到默认关闭。
