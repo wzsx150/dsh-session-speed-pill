@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Session Speed Pill",
-    "description": "Adds one reading to each reply's action row (right of usage, left of the clock). The popup reports a single turn: response time, first-token latency, decode output, prefill, speed ranges and total usage. Settings → General offers \"Always show message actions\", which governs both assistant replies and your own messages. Chinese and English are supported."
+    "description": "Adds a decode-speed reading to each reply's action row (right of the usage control), showing this reply's time breakdown and speed: response time, first-token latency, decode output, prefill, speed ranges and total usage. Settings → General also offers an \"Always show message actions\" switch that keeps the action row of every message visible."
   }
 }
