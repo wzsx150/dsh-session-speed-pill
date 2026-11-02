@@ -1,6 +1,6 @@
 {
   "name": "dsh-session-speed-pill",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "private": true,
   "description": "在每轮回复的操作行里增加显示解码速度（用量右侧），可以显示这一轮回复的时间构成与速度：回答耗时、首字延迟、解码输出、预填充、速度区间与总用量等。设置 → 通用 另有「始终显示消息操作行」开关，可以始终显示所有对话消息的操作行。",
   "author": "wzsx150",
@@ -38,6 +38,7 @@
     "cordis.patch.yml",
     "locale/*.json",
     "docs/*.md",
+    "assets/*.png",
     "icon.svg",
     "README.md",
     "CHANGELOG.md",

@@ -3,6 +3,21 @@
 本文件记录每个版本对用户可见的变化。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [0.13.2] - 2026-11-03
+
+### 上架准备（按 awesome-dsh-plugin 的收录要求）
+
+- 新增 [`assets/icon-180.png`](assets/icon-180.png)：180×180 方形位图，与 [`icon.svg`](icon.svg) 同一图形
+  （蓝胶囊 + 闪电 + 速度线），透明底。插件市场**只接受 GitHub 托管的位图**作卡片图标，
+  SVG 会被拒；不提供则回退到作者头像。已加入 `files`。
+- README 文件结构表补上该资源。
+
+### 校验
+
+- 逐条核对收录要求：`dsh.bundle` + `cordis.patch.yml` 形状、无运行时依赖、
+  无 `@deepseek-ai/*` 进入 `dependencies`、repository/homepage/bugs 指向同一仓库、
+  `files` 每个 glob 都能命中、图标为方形 PNG、README 相对链接全部可解析 —— 全部通过。
+
 ## [0.13.1] - 2026-11-03
 
 ### 文案

@@ -288,7 +288,8 @@ plugin_manager({ action: 'install_bundle', target: '<仓库绝对路径>' })
 | [`client.js`](client.js) | 浏览器入口：动作行胶囊 + 统计弹层 + 设置项 + 语言与样式表 |
 | [`cordis.patch.yml`](cordis.patch.yml) | 挂载 patch 行 |
 | [`locale/zh.json`](locale/zh.json) · [`locale/en.json`](locale/en.json) | 插件管理器中的标题与描述 |
-| [`icon.svg`](icon.svg) | 插件图标（原创） |
+| [`icon.svg`](icon.svg) | 插件图标（矢量，原创） |
+| [`assets/icon-180.png`](assets/icon-180.png) | 市场卡片图（180×180 位图，与 icon.svg 同一图形；市场只收 GitHub 托管的位图） |
 | [`docs/metrics.md`](docs/metrics.md) | 每个数字从原始事件到显示值的完整推导与真实算例 |
 
 ## 十四、许可
