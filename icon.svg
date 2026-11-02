@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Session speed pill">
+  <defs>
+    <linearGradient id="dsh-ssp-face" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f8fdd"/>
+      <stop offset="1" stop-color="#1c5f9e"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="16" width="56" height="32" rx="16" fill="url(#dsh-ssp-face)"/>
+  <rect x="4" y="16" width="56" height="32" rx="16" fill="none" stroke="#0e3a63" stroke-opacity="0.35" stroke-width="2"/>
+  <path d="M34.6 22.5 25.8 34.2h5.7l-1 7.3 8.9-12h-5.7z" fill="#ffffff"/>
+  <g stroke="#a8d6ff" stroke-width="2.4" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M13 29.5h4"/>
+    <path d="M12 35h6.5"/>
+    <path d="M13 40.5h4"/>
+  </g>
+</svg>

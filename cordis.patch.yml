@@ -1,0 +1,10 @@
+# dsh-session-speed-pill 的 bundle 补丁：挂载会话速度胶囊。
+#
+# 该 bundle 出现在 profile 的 dsh.profile.bundles 列表时生效。
+# 主机半身向官方 sessionProjections 注册表登记 `sessionSpeed` 会话投影；
+# 浏览器半身把胶囊注册进 conversation.chat.assistant-actions 槽位
+# （官方「复制 / 点赞 / 分享 / 用量 / 时间」那一行），再由样式表排到用量右侧、时间左侧。
+
+- insert:
+    - id: dsh-session-speed-pill
+      name: dsh-session-speed-pill
